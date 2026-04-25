@@ -1,45 +1,67 @@
-import React, { useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import { Link } from 'react-router';
+import './GamePlayer.css';
 
 const GamePlayer = ({ game }) => {
+  const [isLiked, setIsLiked] = useState(false);
+
   useEffect(() => {
     if (!game) return;
+    
     const history = JSON.parse(localStorage.getItem('crazyGamesHistory')) || [];
-
     const filteredHistory = history.filter(g => g.id !== game.id);
     const updatedHistory = [game, ...filteredHistory].slice(0, 5);
     localStorage.setItem('crazyGamesHistory', JSON.stringify(updatedHistory));
+
+    const likedGames = JSON.parse(localStorage.getItem('crazyGamesLiked')) || [];
+    const alreadyLiked = likedGames.some(g => g.id === game.id);
+    setIsLiked(alreadyLiked);
+
   }, [game]); 
+
+  const handleLike = () => {
+    let likedGames = JSON.parse(localStorage.getItem('crazyGamesLiked')) || [];
+    
+    if (isLiked) {
+      likedGames = likedGames.filter(g => g.id !== game.id);
+    } else {
+      likedGames = [game, ...likedGames];
+    }
+    
+    localStorage.setItem('crazyGamesLiked', JSON.stringify(likedGames));
+    setIsLiked(!isLiked); 
+  };
+
+  const handleShare = () => {
+    alert(`Link copied to clipboard! Share ${game.title} with your friends!`);
+  };
 
   if (!game) return <h2 style={{ color: 'white' }}>Game not found!</h2>;
 
   return (
-    <div style={{ padding: '20px', color: 'white', width: '100%' }}>
-      <Link to="/" style={{ color: '#7a5cff', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 'bold' }}>
+    <div className="game-player-container">
+      <Link to="/" className="back-btn">
         ← Back to Games
       </Link>
       
-      <div style={{ 
-        marginTop: '20px', 
-        backgroundColor: '#000', 
-        aspectRatio: '16/9', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        borderRadius: '12px',
-        border: '1px solid #333'
-      }}>
-        <div style={{ textAlign: 'center' }}>
+      <div className="player-wrapper">
+        <div className="mock-iframe">
           <h1>▶️ Playing {game.title}</h1>
-          <p style={{ color: '#a0a0b0' }}>Simulated iFrame View</p>
+          <p>Simulated iFrame View</p>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', alignItems: 'center' }}>
+      <div className="title-section">
         <h2>{game.title}</h2>
-        <div style={{ display: 'flex', gap: '10px' }}>
-           <button style={{ padding: '8px 16px', background: '#2a2936', border: 'none', color: 'white', borderRadius: '8px', cursor: 'pointer' }}>👍 Like</button>
-           <button style={{ padding: '8px 16px', background: '#2a2936', border: 'none', color: 'white', borderRadius: '8px', cursor: 'pointer' }}>🔗 Share</button>
+        <div className="action-buttons">
+           <button 
+             className="action-btn" 
+             onClick={handleLike}
+             style={{ backgroundColor: isLiked ? '#ff3333' : '#2a2936' }}
+           >
+             {isLiked ? '❤️ Liked' : '👍 Like'}
+           </button>
+           <button className="action-btn" onClick={handleShare}>🔗 Share</button>
         </div>
       </div>
     </div>

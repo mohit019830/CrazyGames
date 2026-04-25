@@ -25,9 +25,20 @@ const Navbar = ({ setSearchQuery }) => {
       </div>
 
       <div className="nav-right">
-        <button className="icon-btn notification">🔔<span className="dot"></span></button>
-        <button className="icon-btn">❤️</button>
-        <button className="icon-btn profile">👤</button>
+        <button className="icon-btn notification" onClick={() => alert("You have 0 new notifications.")}>
+          🔔<span className="dot"></span>
+        </button>
+        
+        <button className="icon-btn" onClick={() => {
+          setSearchQuery('');
+          window.scrollTo(0,0); 
+        }}>
+          ❤️
+        </button>
+        
+        <button className="icon-btn profile" onClick={() => alert("Profile settings are currently unavailable in guest mode.")}>
+          👤
+        </button>
       </div>
     </nav>
   );

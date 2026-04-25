@@ -3,19 +3,26 @@ import GameRow from '../Components/GameRow';
 
 const Home = ({ standardGames = [], topPicks = [], searchQuery = '' }) => {
   const [recentGames, setRecentGames] = useState([]);
+  const [likedGames, setLikedGames] = useState([]);
 
   useEffect(() => {
     const history = JSON.parse(localStorage.getItem('crazyGamesHistory')) || [];
     setRecentGames(history);
+
+    const likes = JSON.parse(localStorage.getItem('crazyGamesLiked')) || [];
+    setLikedGames(likes);
   }, []);
 
   const filteredRecent = recentGames.filter(game =>
     game.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
+  const filteredLiked = likedGames.filter(game =>
+    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const uniqueCategories = [...new Set(standardGames.map(game => game.category))];
-
-  const noResults = standardGames.length === 0 && topPicks.length === 0 && filteredRecent.length === 0;
+  const noResults = standardGames.length === 0 && topPicks.length === 0 && filteredRecent.length === 0 && filteredLiked.length === 0;
 
   return (
     <div className="home-content">
@@ -30,20 +37,18 @@ const Home = ({ standardGames = [], topPicks = [], searchQuery = '' }) => {
             <GameRow title="⏱️ Recently Played" games={filteredRecent} isTopPick={false} />
           )}
 
+          {filteredLiked.length > 0 && (
+            <GameRow title="❤️ Liked Games" games={filteredLiked} isTopPick={false} />
+          )}
+
           {topPicks.length > 0 && (
             <GameRow title="Top picks for you" games={topPicks} isTopPick={true} />
           )}
 
           {uniqueCategories.map(category => {
             const gamesInCategory = standardGames.filter(game => game.category === category);
-            
             return (
-              <GameRow 
-                key={category} 
-                title={`${category} Games`} 
-                games={gamesInCategory} 
-                isTopPick={false} 
-              />
+              <GameRow key={category} title={`${category} Games`} games={gamesInCategory} isTopPick={false} />
             );
           })}
         </>
