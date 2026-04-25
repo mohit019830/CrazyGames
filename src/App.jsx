@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Home from '../pages/Home';
@@ -11,7 +11,6 @@ function App() {
   const [continuePlaying, setContinuePlaying] = useState([]);
   const [topPicks, setTopPicks] = useState([]);
   const [newGames, setNewGames] = useState([]);
-  
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -49,19 +48,23 @@ function App() {
     <Router>
       <div className="app-container">
         <Navbar setSearchQuery={setSearchQuery} />
+
         <div className="main-layout">
           <Sidebar />
-          
+
           <main className="content-area">
             <Routes>
-              <Route path="/" element={
-                <Home 
-                  continuePlaying={filteredContinue} 
-                  topPicks={filteredTop} 
-                  newGames={filteredNew} 
-                  searchQuery={searchQuery}
-                />
-              } />
+              <Route 
+                path="/" 
+                element={
+                  <Home 
+                    continuePlaying={filteredContinue} 
+                    topPicks={filteredTop} 
+                    newGames={filteredNew} 
+                    searchQuery={searchQuery}
+                  />
+                } 
+              />
 
               {allGamesCombined.map((game) => (
                 <Route 
@@ -72,6 +75,7 @@ function App() {
               ))}
             </Routes>
           </main>
+
         </div>
       </div>
     </Router>

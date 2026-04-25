@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; 
 import GameRow from '../components/GameRow';
 
-// 1. Accept searchQuery to know if we are currently searching
 const Home = ({ continuePlaying, topPicks, newGames, searchQuery }) => {
-  
-  // 2. Check if all lists are empty
-  const noResults = continuePlaying.length === 0 && topPicks.length === 0 && newGames.length === 0;
+  const [recentGames, setRecentGames] = useState([]);
+
+  useEffect(() => {
+    const history = JSON.parse(localStorage.getItem('crazyGamesHistory')) || [];
+    setRecentGames(history);
+  }, []);
+
+  const filteredRecent = recentGames.filter(game =>
+    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const noResults = continuePlaying.length === 0 && topPicks.length === 0 && newGames.length === 0 && filteredRecent.length === 0;
 
   return (
     <div className="home-content">
@@ -16,7 +24,10 @@ const Home = ({ continuePlaying, topPicks, newGames, searchQuery }) => {
         </div>
       ) : (
         <>
-          {/* Only render rows if they actually have games in them */}
+          {filteredRecent.length > 0 && (
+            <GameRow title="⏱️ Recently Played" games={filteredRecent} isTopPick={false} />
+          )}
+
           {continuePlaying.length > 0 && <GameRow title="Continue playing" games={continuePlaying} isTopPick={false} />}
           {topPicks.length > 0 && <GameRow title="Top picks for you" games={topPicks} isTopPick={true} />}
           {newGames.length > 0 && <GameRow title="New games" games={newGames} isTopPick={false} />}
