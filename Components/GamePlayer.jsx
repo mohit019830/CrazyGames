@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const GamePlayer = ({ game }) => {
   if (!game) return <h2 style={{ color: 'white' }}>Game not found!</h2>;

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import GameRow from '../components/GameRow';
+import Home from '../pages/Home';
+import GamePlayer from '../components/GamePlayer'; 
 import { Dummy_data } from '../data/games'; 
 import './App.css';
 
@@ -26,25 +28,40 @@ function App() {
 
     setContinuePlaying(standardGames);
     setTopPicks(largeGames);
-    
     setNewGames(Dummy_data); 
   }, []);
 
+  const allGamesCombined = [...continuePlaying, ...topPicks, ...newGames];
+
   return (
-    <div className="app-container">
-      <Navbar />
-      <div className="main-layout">
-        <Sidebar />
-        
-        <main className="content">
-          <GameRow title="Continue playing" games={continuePlaying} isTopPick={false} />
+    <Router>
+      <div className="app-container">
+        <Navbar />
+        <div className="main-layout">
+          <Sidebar />
           
-          <GameRow title="Top picks for you" games={topPicks} isTopPick={true} />
-          
-          <GameRow title="New games" games={newGames} isTopPick={false} />
-        </main>
+          <main className="content-area">
+            <Routes>
+              <Route path="/" element={
+                <Home 
+                  continuePlaying={continuePlaying} 
+                  topPicks={topPicks} 
+                  newGames={newGames} 
+                />
+              } />
+
+              {allGamesCombined.map((game) => (
+                <Route 
+                  key={game.id} 
+                  path={`/game/${game.id}`} 
+                  element={<GamePlayer game={game} />} 
+                />
+              ))}
+            </Routes>
+          </main>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

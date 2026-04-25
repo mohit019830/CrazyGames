@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import './GameRow.css';
 
 const GameRow = ({ title, games, isTopPick }) => {
@@ -10,19 +11,18 @@ const GameRow = ({ title, games, isTopPick }) => {
       
       <div className="row-cards">
         {games.map((game) => (
-          <div 
+          <Link 
+            to={`/game/${game.id}`} 
             key={game.id} 
             className={`card ${isTopPick ? 'card-large' : 'card-standard'}`}
+            style={{ textDecoration: 'none', display: 'block' }}
           >
-            {/* Badges like "Top", "Hot", "Originals" */}
             {game.badge && <span className={`badge badge-${game.badge.toLowerCase()}`}>{game.badge}</span>}
-            
             <img src={game.thumbnail} alt={game.title} className="game-image" />
-            
             <div className="card-overlay">
               <p>{game.title}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
