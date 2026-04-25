@@ -11,6 +11,8 @@ function App() {
   const [continuePlaying, setContinuePlaying] = useState([]);
   const [topPicks, setTopPicks] = useState([]);
   const [newGames, setNewGames] = useState([]);
+  
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const standardGames = [
@@ -33,10 +35,20 @@ function App() {
 
   const allGamesCombined = [...continuePlaying, ...topPicks, ...newGames];
 
+  const filteredContinue = continuePlaying.filter(game => 
+    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const filteredTop = topPicks.filter(game => 
+    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const filteredNew = newGames.filter(game => 
+    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Router>
       <div className="app-container">
-        <Navbar />
+        <Navbar setSearchQuery={setSearchQuery} />
         <div className="main-layout">
           <Sidebar />
           
@@ -44,9 +56,10 @@ function App() {
             <Routes>
               <Route path="/" element={
                 <Home 
-                  continuePlaying={continuePlaying} 
-                  topPicks={topPicks} 
-                  newGames={newGames} 
+                  continuePlaying={filteredContinue} 
+                  topPicks={filteredTop} 
+                  newGames={filteredNew} 
+                  searchQuery={searchQuery}
                 />
               } />
 
