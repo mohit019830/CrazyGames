@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react'; 
 import { Link } from 'react-router';
 
 const GamePlayer = ({ game }) => {
+  useEffect(() => {
+    if (!game) return;
+    const history = JSON.parse(localStorage.getItem('crazyGamesHistory')) || [];
+
+    const filteredHistory = history.filter(g => g.id !== game.id);
+    const updatedHistory = [game, ...filteredHistory].slice(0, 5);
+    localStorage.setItem('crazyGamesHistory', JSON.stringify(updatedHistory));
+  }, [game]); 
+
   if (!game) return <h2 style={{ color: 'white' }}>Game not found!</h2>;
 
   return (
