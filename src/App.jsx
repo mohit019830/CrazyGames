@@ -1,40 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 
-// Components
-import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
-import GamePlayer from '../components/GamePlayer'; 
-import Home from '../pages/Home';
+import Navbar from '../Components/Navbar';
+import Sidebar from '../Components/Sidebar';
+import GamePlayer from '../Components/GamePlayer'; 
+import Home from '../Pages/Home';
 
-// Data and Styles
-import { Dummy_data } from '../data/games'; 
+import { ALL_GAMES_DATA } from '../Data/games'; 
 import './App.css';
 
 function App() {
-  const [continuePlaying, setContinuePlaying] = useState([]);
+  const [standardGames, setStandardGames] = useState([]);
   const [topPicks, setTopPicks] = useState([]);
-  const [newGames, setNewGames] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const largeGames = ALL_GAMES_DATA.filter(game => game.isLarge);
-    const standardGames = ALL_GAMES_DATA.filter(game => !game.isLarge);
+    const large = ALL_GAMES_DATA.filter(game => game.isLarge);
+    const standard = ALL_GAMES_DATA.filter(game => !game.isLarge);
 
-    setContinuePlaying(standardGames.slice(0, 15)); 
-    setTopPicks(largeGames);                        
-    setNewGames(standardGames.slice(15, 30)); 
+    setTopPicks(large);
+    setStandardGames(standard); 
   }, []);
 
-  const allGamesCombined = [...continuePlaying, ...topPicks, ...newGames];
+  const allGamesCombined = [...standardGames, ...topPicks];
 
-  const filteredContinue = continuePlaying.filter(game => 
-    game.title.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter based on the search query
+  const filteredStandard = standardGames.filter(game => 
+    game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    game.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const filteredTop = topPicks.filter(game => 
-    game.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredNew = newGames.filter(game => 
     game.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -44,7 +39,7 @@ function App() {
         <Navbar setSearchQuery={setSearchQuery} />
 
         <div className="main-layout">
-          <Sidebar />
+          <Sidebar setSearchQuery={setSearchQuery} />
 
           <main className="content-area">
             <Routes>
@@ -52,9 +47,8 @@ function App() {
                 path="/" 
                 element={
                   <Home 
-                    continuePlaying={filteredContinue} 
+                    standardGames={filteredStandard} 
                     topPicks={filteredTop} 
-                    newGames={filteredNew} 
                     searchQuery={searchQuery}
                   />
                 } 
@@ -69,7 +63,6 @@ function App() {
               ))}
             </Routes>
           </main>
-
         </div>
       </div>
     </Router>

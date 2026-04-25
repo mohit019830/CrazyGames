@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; 
-import GameRow from '../components/GameRow';
+import GameRow from '../Components/GameRow'; 
 
-const Home = ({ continuePlaying, topPicks, newGames, searchQuery }) => {
+const Home = ({ standardGames = [], topPicks = [], searchQuery = '' }) => {
   const [recentGames, setRecentGames] = useState([]);
 
   useEffect(() => {
@@ -13,14 +13,16 @@ const Home = ({ continuePlaying, topPicks, newGames, searchQuery }) => {
     game.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const noResults = continuePlaying.length === 0 && topPicks.length === 0 && newGames.length === 0 && filteredRecent.length === 0;
+  const uniqueCategories = [...new Set(standardGames.map(game => game.category))];
+
+  const noResults = standardGames.length === 0 && topPicks.length === 0 && filteredRecent.length === 0;
 
   return (
     <div className="home-content">
       {noResults ? (
         <div style={{ color: '#a0a0b0', marginTop: '40px', textAlign: 'center' }}>
           <h2>No games found for "{searchQuery}" 🎮</h2>
-          <p>Try searching for something else like "Moto" or "Track"</p>
+          <p>Try searching for a different title or category!</p>
         </div>
       ) : (
         <>
@@ -28,9 +30,22 @@ const Home = ({ continuePlaying, topPicks, newGames, searchQuery }) => {
             <GameRow title="⏱️ Recently Played" games={filteredRecent} isTopPick={false} />
           )}
 
-          {continuePlaying.length > 0 && <GameRow title="Continue playing" games={continuePlaying} isTopPick={false} />}
-          {topPicks.length > 0 && <GameRow title="Top picks for you" games={topPicks} isTopPick={true} />}
-          {newGames.length > 0 && <GameRow title="New games" games={newGames} isTopPick={false} />}
+          {topPicks.length > 0 && (
+            <GameRow title="Top picks for you" games={topPicks} isTopPick={true} />
+          )}
+
+          {uniqueCategories.map(category => {
+            const gamesInCategory = standardGames.filter(game => game.category === category);
+            
+            return (
+              <GameRow 
+                key={category} 
+                title={`${category} Games`} 
+                games={gamesInCategory} 
+                isTopPick={false} 
+              />
+            );
+          })}
         </>
       )}
     </div>
