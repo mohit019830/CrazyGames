@@ -15,7 +15,7 @@ const GameRow = ({ title, games, isTopPick }) => {
             to={`/game/${game.id}`} 
             key={game.id} 
             className={`card ${isTopPick ? 'card-large' : 'card-standard'}`}
-            style={{ textDecoration: 'none', display: 'block' }}
+            style={{ textDecoration: 'none', display: 'block', color: 'white' }}
           >
             {game.badge && <span className={`badge badge-${game.badge.toLowerCase()}`}>{game.badge}</span>}
             <img src={game.thumbnail} alt={game.title} className="game-image" />
