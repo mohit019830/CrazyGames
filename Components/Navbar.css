@@ -1,0 +1,127 @@
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 65px;
+  background-color: var(--bg-panel, #1a1924); 
+  border-bottom: 1px solid #2a2936;
+  color: white;
+}
+
+.nav-left, .nav-center, .nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-left {
+  gap: 15px;
+}
+
+/* Hamburger menu button */
+.menu-btn {
+  background: none;
+  border: none;
+  color: #a0a0b0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.menu-btn:hover {
+  color: white;
+}
+
+/* Logo styling */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+}
+
+.logo h2 {
+  font-size: 1rem;
+  line-height: 1;
+  text-transform: lowercase;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+/* Search bar styling */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  background-color: #2a2936;
+  border: none;
+  color: white;
+  padding: 10px 40px 10px 20px;
+  border-radius: 24px; 
+  width: 400px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  background-color: #353444;
+  box-shadow: 0 0 0 2px #7a5cff; 
+}
+
+.search-input::placeholder {
+  color: #a0a0b0;
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #a0a0b0;
+  cursor: pointer;
+}
+
+.nav-right {
+  gap: 12px;
+}
+
+.icon-btn {
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0a0b0;
+  font-size: 1.2rem;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.icon-btn:hover, .icon-btn.profile {
+  background-color: #2a2936;
+  color: white;
+}
+
+/* The red notification dot on the bell icon */
+.notification .dot {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff3333;
+  border-radius: 50%;
+  border: 2px solid var(--bg-panel, #1a1924);
+}
