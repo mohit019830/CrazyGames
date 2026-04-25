@@ -18,22 +18,12 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const standardGames = [
-      { id: 10, title: "Moto X3M", thumbnail: "https://placehold.co/150x150/1a1924/FFF?text=Moto+X3M", badge: "Top" },
-      { id: 11, title: "Venge.io", thumbnail: "https://placehold.co/150x150/2a2936/FFF?text=Venge.io", badge: "Hot" },
-      { id: 12, title: "Subway Surfers", thumbnail: "https://placehold.co/150x150/7a5cff/FFF?text=Subway" },
-      { id: 13, title: "Smash Karts", thumbnail: "https://placehold.co/150x150/ff3333/FFF?text=Karts" }
-    ];
+    const largeGames = ALL_GAMES_DATA.filter(game => game.isLarge);
+    const standardGames = ALL_GAMES_DATA.filter(game => !game.isLarge);
 
-    const largeGames = [
-      { id: 101, title: "PolyTrack", thumbnail: "https://placehold.co/280x160/1a1924/FFF?text=PolyTrack", badge: "Originals" },
-      { id: 102, title: "Deadly Descent", thumbnail: "https://placehold.co/280x160/333333/FFF?text=Descent" },
-      { id: 103, title: "Count Masters", thumbnail: "https://placehold.co/280x160/7a5cff/FFF?text=Count+Masters", badge: "Originals" }
-    ];
-
-    setContinuePlaying(standardGames);
-    setTopPicks(largeGames);
-    setNewGames(Dummy_data); 
+    setContinuePlaying(standardGames.slice(0, 15)); 
+    setTopPicks(largeGames);                        
+    setNewGames(standardGames.slice(15, 30)); 
   }, []);
 
   const allGamesCombined = [...continuePlaying, ...topPicks, ...newGames];
